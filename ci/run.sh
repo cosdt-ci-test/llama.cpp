@@ -37,6 +37,9 @@
 # with OPENVINO support
 # GG_BUILD_OPENVINO=1 GG_BUILD_LOW_PERF=1 GGML_OPENVINO_DEVICE=CPU bash ./ci/run.sh ./tmp/results ./tmp/mnt
 #
+# # with CANN support
+# GG_BUILD_CANN=1 GG_BUILD_LOW_PERF=1 bash ./ci/run.sh ./tmp/results ./tmp/mnt
+#
 
 if [ -z "$2" ]; then
     echo "usage: $0 <output-dir> <mnt-dir>"
@@ -163,6 +166,15 @@ if [ ! -z ${GG_BUILD_MUSA} ]; then
     # Use qy1 by default (MTT S80)
     MUSA_ARCH=${MUSA_ARCH:-21}
     CMAKE_EXTRA="${CMAKE_EXTRA} -DGGML_MUSA=ON -DMUSA_ARCHITECTURES=${MUSA_ARCH}"
+fi
+
+if [ ! -z ${GG_BUILD_CANN} ]; then
+    if [ -z ${ASCEND_TOOLKIT_HOME} ]; then
+        echo "Not detected ASCEND_TOOLKIT_HOME, please install CANN toolkit and run:"
+        echo "source /usr/local/Ascend/ascend-toolkit/set_env.sh"
+        exit 1
+    fi
+    CMAKE_EXTRA="${CMAKE_EXTRA} -DGGML_CANN=ON"
 fi
 
 if [ ! -z ${GG_BUILD_NO_SVE} ]; then
