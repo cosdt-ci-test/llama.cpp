@@ -33,6 +33,8 @@ env:
   CMAKE_ARGS: "-DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_TOOLS=ON -DLLAMA_BUILD_SERVER=ON -DGGML_RPC=ON"
 
 # note: run this workflow one at a time for better cache reuse
+# TEMPORARY (ascend-ci): platform jobs other than openEuler-cann are `if: false`
+# so a manual Release run only builds CANN packaging.
 concurrency:
   group: release
   queue: max
@@ -90,7 +92,7 @@ jobs:
 
   macos-cpu:
     needs: [check-release, get-version]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
     strategy:
       matrix:
         include:
@@ -172,7 +174,7 @@ jobs:
 
   ubuntu-cpu:
     needs: [check-release, get-version]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
     strategy:
       matrix:
         include:
@@ -259,7 +261,7 @@ jobs:
 
   ubuntu-vulkan:
     needs: [check-release, get-version]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     strategy:
       matrix:
@@ -345,7 +347,7 @@ jobs:
 
   android-arm64:
     needs: [check-release, get-version]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     runs-on: ubuntu-latest
 
@@ -438,7 +440,7 @@ jobs:
 
   ubuntu-24-openvino:
     needs: [check-release, get-version]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     runs-on: ubuntu-24.04
 
@@ -557,7 +559,7 @@ jobs:
 
   windows-openvino:
     needs: [check-release]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     runs-on: windows-2022
 
@@ -686,7 +688,7 @@ jobs:
 
   windows-cpu:
     needs: [check-release]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     runs-on: windows-2025-vs2026
 
@@ -754,7 +756,7 @@ jobs:
 
   windows-rocm:
     needs: [check-release]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     runs-on: windows-2022
 
@@ -883,7 +885,7 @@ jobs:
 
   windows:
     needs: [check-release]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     runs-on: windows-2025
 
@@ -983,7 +985,7 @@ jobs:
   windows-cuda:
     name: windows-cuda (${{ matrix.cuda }}, ${{ matrix.arch }})
     needs: [check-release]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     runs-on: windows-2022
 
@@ -1088,7 +1090,7 @@ jobs:
 
   windows-sycl:
     needs: [check-release]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     runs-on: windows-2022
 
@@ -1198,7 +1200,7 @@ jobs:
 
   ubuntu-24-sycl:
     needs: [check-release]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     strategy:
       matrix:
@@ -1291,7 +1293,7 @@ jobs:
 
   ubuntu-22-rocm:
     needs: [check-release, get-version]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     runs-on: ubuntu-22.04
 
@@ -1409,7 +1411,7 @@ jobs:
 
   ios-xcode:
     needs: [check-release, get-version]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
     runs-on: macos-26
 
     steps:
@@ -1510,13 +1512,13 @@ jobs:
 
   ui-build:
     needs: [check-release, get-version]
-    if: ${{ needs.check-release.outputs.should_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
     uses: ./.github/workflows/ui-build.yml
     with:
       hf_ui_version: ${{ needs.get-version.outputs.ui_version }}
 
   release:
-    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/master' ) || github.event.inputs.create_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     # Fine-grant permission
     # https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
@@ -1696,7 +1698,7 @@ jobs:
             }
 
   ui-publish:
-    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/master' ) || github.event.inputs.create_release == 'true' }}
+    if: false # temporarily disabled: test openEuler-cann only
 
     needs:
       - release
